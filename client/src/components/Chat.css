@@ -1,0 +1,138 @@
+/* Chat.css */
+
+/* General layout and background */
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.description-container {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.description-container p {
+    margin-bottom: 10px;
+}
+
+strong {
+    color: #e74c3c;
+}
+
+i {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+/* Chat log and message styling */
+.chat-log {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.chat-log div {
+    padding: 5px 0;
+}
+
+.chat-log div:nth-child(odd) {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+}
+
+.chat-log div:nth-child(even) {
+    background-color: #e9e9e9;
+    border-radius: 4px;
+}
+
+/* User list styling */
+.user-list {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.user-list h4 {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.user-list ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.user-list li {
+    padding: 5px;
+    font-size: 0.9rem;
+    color: #333;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+/* Chat input field */
+.chat-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #fff;
+    margin-top: 10px;
+}
+
+.chat-input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.chat-input::placeholder {
+    color: #aaa;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .chat-container {
+        padding: 10px;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .chat-input {
+        font-size: 0.9rem;
+    }
+
+    .chat-log {
+        font-size: 0.8rem;
+    }
+
+    .user-list li {
+        font-size: 0.8rem;
+    }
+}
