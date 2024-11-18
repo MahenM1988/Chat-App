@@ -7,6 +7,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
@@ -27,7 +28,18 @@ const io = new Server(server, {
     }
 });
 
-// Dummy users array for authentication (replace with actual user management)
+// MongoDB connection (optional, still useful for future use)
+const mongoURI = process.env.MONGO_URI; // Mongo URI from .env file
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('MongoDB connected successfully');
+    })
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+        process.exit(1); // Exit the process if DB connection fails
+    });
+
+// Dummy users array for authentication (keeping this for now)
 const users = [
     { id: 1, username: 'Admin1', password: bcrypt.hashSync('123', 10) },
     { id: 2, username: 'Admin2', password: bcrypt.hashSync('456', 10) }
