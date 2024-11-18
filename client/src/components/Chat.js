@@ -81,6 +81,9 @@ function Chat({ username, ip, handleLogout }) {
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 placeholder="Type your message here..."
             />
+            <p style={{alignSelf: 'center', textAlign: 'center', marginTop: '20px' }}>
+              &copy; 2024 Mahen Mahindaratne. All Rights Reserved.
+            </p>
         </div>
     );
 }
