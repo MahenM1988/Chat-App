@@ -5,7 +5,7 @@ const path = require('path');
 const cors = require('cors');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 const session = require('express-session');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -41,8 +41,8 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Dummy users array for authentication (keeping this for now)
 const users = [
-    { id: 1, username: 'Admin1', password: bcrypt.hashSync('123', 10) },
-    { id: 2, username: 'Admin2', password: bcrypt.hashSync('456', 10) }
+    { id: 1, username: 'Admin1', password: bcryptjs.hashSync('123', 10) },
+    { id: 2, username: 'Admin2', password: bcryptjs.hashSync('456', 10) }
 ];
 
 // Passport strategy for local login
@@ -52,7 +52,7 @@ passport.use(new LocalStrategy((username, password, done) => {
         return done(null, false, { message: 'Incorrect username.' });
     }
 
-    bcrypt.compare(password, user.password, (err, isMatch) => {
+    bcryptjs.compare(password, user.password, (err, isMatch) => {
         if (err) return done(err);
         if (!isMatch) return done(null, false, { message: 'Incorrect password.' });
 
