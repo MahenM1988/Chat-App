@@ -1,3 +1,5 @@
+// Frontend - React (Chat.js)
+
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import './Chat.css';
@@ -8,38 +10,48 @@ function Chat({ username, ip, handleLogout }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [users, setUsersList] = useState([]);
+    const [reactions, setReactions] = useState({});
+    const [hoveredMessageId, setHoveredMessageId] = useState(null);
 
-    // Join the chat with username and IP
     useEffect(() => {
         socket.emit('join', { username, ip });
 
-        // Listen for new messages
         socket.on('newMessage', (message) => {
-            setMessages((prevMessages) => [...prevMessages, message]); // Add the new message to the chat log
+            setMessages((prevMessages) => [...prevMessages, message]);
         });
 
-        // Listen for user list updates
         socket.on('updateUserList', (users) => {
             setUsersList(users);
         });
 
-        // Cleanup socket listeners on component unmount
+        socket.on('newReaction', (reactionData) => {
+            const { messageId, emoji, user } = reactionData;
+            setReactions((prevReactions) => {
+                const messageReactions = prevReactions[messageId] || {};
+                return {
+                    ...prevReactions,
+                    [messageId]: { ...messageReactions, [user]: emoji },
+                };
+            });
+        });
+
         return () => {
             socket.off('newMessage');
             socket.off('updateUserList');
+            socket.off('newReaction');
         };
     }, [username, ip]);
 
-    // Send a message to the server
     const sendMessage = () => {
         if (input.trim()) {
-            const message = { content: input, timestamp: new Date(), username, ip };
-            socket.emit('sendMessage', message); // Emit message to the server
+            const timestamp = new Date().toISOString(); // Create timestamp
+            const messageId = `${username}-${ip}-${timestamp}`; // Generate unique message ID
+            const message = { id: messageId, content: input, timestamp, username, ip };
+            socket.emit('sendMessage', message); // Send message with unique ID to backend
             setInput(''); // Clear input field
         }
-    };
+    };   
 
-    // Format timestamp for display
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
         return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
@@ -51,16 +63,17 @@ function Chat({ username, ip, handleLogout }) {
                 Logout
             </button>
             <h3>Real-Time Chat App</h3>
-            <div className="description-container">
-                <p>
-                    This is a Real-Time Chat App where connected users can share live messages
-                    with each other.
-                </p>
-            </div>
             <div className="chat-log">
-                {messages.map((msg, index) => (
-                    <div key={index}>
-                        [{formatTimestamp(msg.timestamp)}] {msg.username} ({msg.ip}): {msg.content}
+                {messages.map((msg) => (
+                    <div
+                        key={msg.id}
+                        className="message"
+                        onMouseEnter={() => setHoveredMessageId(msg.id)}
+                        onMouseLeave={() => setHoveredMessageId(null)}
+                    >
+                        <p>
+                            [{formatTimestamp(msg.timestamp)}] {msg.username} ({msg.ip}): {msg.content}
+                        </p>
                     </div>
                 ))}
             </div>
@@ -68,9 +81,7 @@ function Chat({ username, ip, handleLogout }) {
                 <h4>Connected Users</h4>
                 <ul>
                     {users.map((user, index) => (
-                        <li key={index}>
-                            {user.name ? user.name : 'Unnamed User'}
-                        </li>
+                        <li key={index}>{user.name || 'Unnamed User'}</li>
                     ))}
                 </ul>
             </div>
@@ -81,9 +92,7 @@ function Chat({ username, ip, handleLogout }) {
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 placeholder="Type your message here..."
             />
-            <p style={{alignSelf: 'center', textAlign: 'center', marginTop: '20px' }}>
-              &copy; 2024 Mahen Mahindaratne. All Rights Reserved.
-            </p>
+            <p>&copy; 2024 Mahen Mahindaratne. All Rights Reserved.</p>
         </div>
     );
 }

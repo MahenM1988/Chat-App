@@ -67,8 +67,7 @@ const App = () => {
         await fetch('http://localhost:5000/logout', { 
             method: 'POST', 
             credentials: 'include' // Ensure session cookie is sent with logout request
-        });
-
+        });5
         setIsAuthenticated(false); // Reset authentication state
         setUsername(''); // Reset username state
         setIp(''); // Reset IP state
