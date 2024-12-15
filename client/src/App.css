@@ -1,6 +1,6 @@
 .separator {
-  height: 1px; /* Thickness of the line */
-  background-color: #ccc; /* Color of the line */
-  margin: 20px 0; /* Spacing around the line */
-  width: 100%; /* Full width */
+  height: 1px; 
+  background-color: #ccc; 
+  margin: 20px 0; 
+  width: 100%; 
 }
