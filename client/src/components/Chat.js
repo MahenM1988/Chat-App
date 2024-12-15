@@ -44,11 +44,11 @@ function Chat({ username, ip, handleLogout }) {
 
     const sendMessage = () => {
         if (input.trim()) {
-            const timestamp = new Date().toISOString(); // Create timestamp
-            const messageId = `${username}-${ip}-${timestamp}`; // Generate unique message ID
+            const timestamp = new Date().toISOString(); 
+            const messageId = `${username}-${ip}-${timestamp}`; 
             const message = { id: messageId, content: input, timestamp, username, ip };
-            socket.emit('sendMessage', message); // Send message with unique ID to backend
-            setInput(''); // Clear input field
+            socket.emit('sendMessage', message); 
+            setInput(''); 
         }
     };   
 
