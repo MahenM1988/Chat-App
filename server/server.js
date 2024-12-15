@@ -13,7 +13,6 @@ const mongoose = require('mongoose');
 // MongoDB Models
 const UserActivity = require('./models/userActivity');
 const ChatMessage = require('./models/chatMessage');
-const MessageReaction = require('./models/MessageReaction');  // New model for storing reactions
 
 const app = express();
 const server = http.createServer(app);
@@ -22,7 +21,7 @@ const server = http.createServer(app);
 const corsOptions = {
   origin: 'http://localhost:3000',
   methods: ['GET', 'POST'],
-  credentials: true,  // Allow credentials like cookies
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
@@ -37,7 +36,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch((err) => {
     console.error('MongoDB connection error:', err);
-    process.exit(1);  // Exit the process on DB connection failure
+    process.exit(1);  
   });
 
 // User authentication
@@ -98,7 +97,6 @@ app.post('/logout', (req, res) => {
 
 // Socket.io configuration
 const socketUsers = new Map();
-const reactions = {};  // Store reactions globally
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
@@ -106,7 +104,7 @@ io.on('connection', (socket) => {
   socket.on('join', ({ username }) => {
     const user = { name: username, socketId: socket.id };
     socketUsers.set(socket.id, user);
-    io.emit('updateUserList', Array.from(socketUsers.values()));  // Emit updated user list
+    io.emit('updateUserList', Array.from(socketUsers.values())); 
   });
 
   socket.on('sendMessage', (message) => {
@@ -130,7 +128,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
     socketUsers.delete(socket.id);
-    io.emit('updateUserList', Array.from(socketUsers.values()));  // Emit updated user list
+    io.emit('updateUserList', Array.from(socketUsers.values()));  
   });
 });
 
