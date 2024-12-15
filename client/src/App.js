@@ -27,7 +27,7 @@ const App = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            const newSocket = io('http://localhost:5000', { withCredentials: true }); // Ensure socket connection uses cookies
+            const newSocket = io('http://localhost:5000', { withCredentials: true }); 
             setSocket(newSocket);
 
             // Listen for updates to the user list
@@ -38,7 +38,7 @@ const App = () => {
             // Cleanup on component unmount or authentication change
             return () => newSocket.close();
         }
-    }, [isAuthenticated]); // Only reconnect when `isAuthenticated` changes
+    }, [isAuthenticated]); 
 
     const handleLogin = async (username, password) => {
         try {
@@ -47,13 +47,13 @@ const App = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
-                credentials: 'include', // Ensure cookies (session) are sent with the request
+                credentials: 'include', 
             });
 
             if (response.ok) {
                 const data = await response.json();
                 setUsername(data.username);
-                setIsAuthenticated(true); // Mark the user as authenticated
+                setIsAuthenticated(true); 
             } else {
                 alert('Invalid credentials');
             }
@@ -66,7 +66,7 @@ const App = () => {
         // Send logout request to backend
         await fetch('http://localhost:5000/logout', { 
             method: 'POST', 
-            credentials: 'include' // Ensure session cookie is sent with logout request
+            credentials: 'include' 
         });5
         setIsAuthenticated(false); // Reset authentication state
         setUsername(''); // Reset username state
