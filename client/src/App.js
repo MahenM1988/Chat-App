@@ -27,7 +27,7 @@ const App = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            const newSocket = io('http://localhost:5000', { withCredentials: true }); 
+            const newSocket = io('http://localhost/5000', { withCredentials: true }); // Ensure socket connection uses cookies
             setSocket(newSocket);
 
             // Listen for updates to the user list
@@ -43,11 +43,11 @@ const App = () => {
     const handleLogin = async (username, password) => {
         try {
             // Send login request to the backend with credentials included
-            const response = await fetch('http://localhost:5000/login', {
+            const response = await fetch('http://localhost/5000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
-                credentials: 'include', 
+                credentials: 'include', // Ensure cookies (session) are sent with the request
             });
 
             if (response.ok) {
@@ -64,10 +64,11 @@ const App = () => {
 
     const handleLogout = async () => {
         // Send logout request to backend
-        await fetch('http://localhost:5000/logout', { 
+        await fetch('http://localhost/5000/logout', { 
             method: 'POST', 
-            credentials: 'include' 
-        });5
+            credentials: 'include' // Ensure session cookie is sent with logout request
+        });
+
         setIsAuthenticated(false); // Reset authentication state
         setUsername(''); // Reset username state
         setIp(''); // Reset IP state

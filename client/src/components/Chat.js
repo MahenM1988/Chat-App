@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import './Chat.css';
 
-const socket = io('http://localhost:5000');
+const socket = io('http://localhost/5000');
 
 function Chat({ username, ip, handleLogout }) {
     const [messages, setMessages] = useState([]);
@@ -44,11 +44,11 @@ function Chat({ username, ip, handleLogout }) {
 
     const sendMessage = () => {
         if (input.trim()) {
-            const timestamp = new Date().toISOString(); 
-            const messageId = `${username}-${ip}-${timestamp}`; 
+            const timestamp = new Date().toISOString(); // Create timestamp
+            const messageId = `${username}-${ip}-${timestamp}`; // Generate unique message ID
             const message = { id: messageId, content: input, timestamp, username, ip };
-            socket.emit('sendMessage', message); 
-            setInput(''); 
+            socket.emit('sendMessage', message); // Send message with unique ID to backend
+            setInput(''); // Clear input field
         }
     };   
 
