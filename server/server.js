@@ -11,16 +11,14 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 
 // MongoDB Models
-const UserActivity = require('./models/userActivity');
 const ChatMessage = require('./models/chatMessage');
-const MessageReaction = require('./models/MessageReaction');  
 
 const app = express();
 const server = http.createServer(app);
 
 // Enable CORS
 const corsOptions = {
-  origin: 'http://localhost/3000',
+  origin: 'http://localhost:3000',
   methods: ['GET', 'POST'],
   credentials: true,  
 };
@@ -37,7 +35,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch((err) => {
     console.error('MongoDB connection error:', err);
-    process.exit(1); 
+    process.exit(1);  // Exit the process on DB connection failure
   });
 
 // User authentication
@@ -74,7 +72,7 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'development',
+    secure: process.env.NODE_ENV === 'production',
     maxAge: 24 * 60 * 60 * 1000,  // 1 day expiry
   },
 }));
@@ -95,6 +93,9 @@ app.post('/logout', (req, res) => {
     res.json({ message: 'Logged out successfully' });
   });
 });
+
+// Socket.io configuration
+const socketUsers = new Map();
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
@@ -126,7 +127,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
     socketUsers.delete(socket.id);
-    io.emit('updateUserList', Array.from(socketUsers.values()));  
+    io.emit('updateUserList', Array.from(socketUsers.values()));  // Emit updated user list
   });
 });
 

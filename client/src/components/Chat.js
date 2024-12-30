@@ -4,7 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import './Chat.css';
 
-const socket = io('http://localhost/5000');
+const socketUrl = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000'; 
+const socket = io(socketUrl, { withCredentials: true });
+
+console.log('Connecting to socket server at:', socketUrl);
+
 
 function Chat({ username, ip, handleLogout }) {
     const [messages, setMessages] = useState([]);
